@@ -1,3 +1,5 @@
+## Task 2 — Hello World and hot reload
+
 Step| Prediction: what will you see?| What you saw |Same?
 a. | The greeting will change|The greeting changed to my native language immediately after hot reload. The app did not restart.| yes
 b. | it will still display amharic greeting |The app still displayed the Amharic greeting after hot reload.| yes
