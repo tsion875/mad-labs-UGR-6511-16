@@ -44,6 +44,10 @@ void main() {
     // Run it and watch it fail. Show the failing test to the TA at
     // Checkpoint B, then make it pass.
   });
+  test('handles the exact BMI boundaries of 18.5 and 30.0', () {
+    expect(bmiCategory(18.5), 'Normal');
+    expect(bmiCategory(30.0), 'Obese');
+  });
 
   group('isPalindrome', () {
     test('ignores case and punctuation', () {
