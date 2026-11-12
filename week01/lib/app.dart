@@ -12,7 +12,7 @@ class CampusCompanionApp extends StatelessWidget {
         colorSchemeSeed: const Color(0xFF00695C),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: const AboutScreen(),
     );
   }
 }
