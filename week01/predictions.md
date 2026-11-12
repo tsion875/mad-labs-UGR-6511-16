@@ -6,7 +6,8 @@ b. | it will still display amharic greeting |The app still displayed the Amharic
 c. |The app will restart and display the Placeholder widget instead of the Amharic greeting|After hot restart, the app displayed the Placeholder widget (a large X) instead of the Amharic greeting.| yes
 selfcheck: Hot reload changed the running app without restarting it. It preserves the app's current state and does not rerun main(). while hot restart restarts the app from the beginning, reruns main(), and resets the app's state.
 
-task5:
+## Task 5 — Check an assistant's answer
+
 for 'addis ababa' will become 'Addis Ababa'
 for 'hello world' The function will show an error. The repeated spaces create an empty word, and the code tries to access its first character.
 for '' The function throws an error because the input produces an empty word.
