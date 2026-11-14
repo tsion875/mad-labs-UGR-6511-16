@@ -10,6 +10,6 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Profile'));
+    return Center(child: Image.asset('assets/images/logo.png'));
   }
 }

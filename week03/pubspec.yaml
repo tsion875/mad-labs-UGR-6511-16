@@ -1,6 +1,6 @@
 name: campus_companion
 description: "Campus Companion — the running example app for Mobile Applications Development."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0+1
 
 environment:
@@ -18,4 +18,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
   # TODO(lab): Task 1 — declare the assets/images/ folder here.
+  assets:
+    - assets/images/
