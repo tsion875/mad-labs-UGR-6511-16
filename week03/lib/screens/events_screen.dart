@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/sample_events.dart';
+import '../widgets/event_card.dart';
 
 /// The events feed.
 // TODO(lab): Task 3 —
@@ -16,10 +17,31 @@ class EventsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        for (final event in sampleEvents) ListTile(title: Text(event.title)),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth >= wideBreakpoint) {
+          return GridView.builder(
+            padding: const EdgeInsets.all(8),
+            gridDelegate:
+                const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 480,
+              mainAxisExtent: 200,
+            ),
+            itemCount: sampleEvents.length,
+            itemBuilder: (context, index) {
+              return EventCard(event: sampleEvents[index]);
+            },
+          );
+        }
+
+        return ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: sampleEvents.length,
+          itemBuilder: (context, index) {
+            return EventCard(event: sampleEvents[index]);
+          },
+        );
+      },
     );
   }
 }
