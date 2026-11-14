@@ -5,8 +5,9 @@ import '../widgets/lifecycle_logger.dart';
 /// Home screen.
 // TODO(lab): Task 2 — decide whether HomeScreen must be stateless or
 // stateful (write the reason in lifecycle.md), then make it:
-//  - show a check-in counter starting at 0
-//  - increment the counter when the FAB is pressed
+//  - show 'Check-ins today: N' (titleLarge text style)
+//  - have a FloatingActionButton (Icons.add) that adds one to N
+//  - have a SwitchListTile 'Show lifecycle logger'
 //  - show LifecycleLogger(label: 'Check-ins: N') only while the switch
 //    is on
 // The tests in test/screens/home_screen_test.dart describe the behaviour.
@@ -20,6 +21,20 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _checkIns = 0;
   bool _showLogger = false;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(const Duration(seconds: 2)).then((_) {
+      if (!mounted) return;
+
+      setState(() {
+        _loading = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +46,15 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Text('Welcome to Campus Companion'),
-            Text(
-              'Check-ins today: $_checkIns',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+
+            if (_loading)
+              const Center(child: CircularProgressIndicator())
+            else
+              Text(
+                'Check-ins today: $_checkIns',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+
             SwitchListTile(
               title: const Text('Show lifecycle logger'),
               value: _showLogger,
@@ -44,7 +64,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 });
               },
             ),
-            if (_showLogger) LifecycleLogger(label: 'Check-ins: $_checkIns'),
+
+            if (_showLogger && !_loading)
+              LifecycleLogger(label: 'Check-ins: $_checkIns'),
           ],
         ),
       ),

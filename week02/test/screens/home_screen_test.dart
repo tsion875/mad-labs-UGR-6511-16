@@ -1,13 +1,27 @@
+import 'package:campus_companion/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:campus_companion/screens/home_screen.dart';
-
 void main() {
+  testWidgets('shows loading indicator then check-in counter', (tester) async {
+    await tester.pumpWidget(const MaterialApp(home: HomeScreen()));
+
+    // Initially, the loading indicator should appear.
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.text('Check-ins today: 0'), findsNothing);
+
+    // Advance the test clock by two seconds.
+    await tester.pump(const Duration(seconds: 2));
+
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    expect(find.text('Check-ins today: 0'), findsOneWidget);
+  });
+
   testWidgets('tapping the FAB increments the check-in counter', (
     tester,
   ) async {
     await tester.pumpWidget(const MaterialApp(home: HomeScreen()));
+    await tester.pump(const Duration(seconds: 2));
 
     expect(find.text('Check-ins today: 0'), findsOneWidget);
 
@@ -22,12 +36,14 @@ void main() {
   // three times, and expect the text 'Check-ins today: 3'.
   testWidgets('FAB increments check-ins to 3', (tester) async {
     await tester.pumpWidget(const MaterialApp(home: HomeScreen()));
+    await tester.pump(const Duration(seconds: 2));
 
     final fab = find.byType(FloatingActionButton);
 
     await tester.tap(fab);
     await tester.tap(fab);
     await tester.tap(fab);
+
     await tester.pump();
 
     expect(find.text('Check-ins today: 3'), findsOneWidget);
@@ -37,17 +53,16 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(const MaterialApp(home: HomeScreen()));
+    await tester.pump(const Duration(seconds: 2));
 
     expect(find.byType(Card), findsNothing);
 
-    await tester.tap(find.byType(SwitchListTile));
+    await tester.tap(find.byType(Switch));
     await tester.pump();
-
     expect(find.byType(Card), findsOneWidget);
 
-    await tester.tap(find.byType(SwitchListTile));
+    await tester.tap(find.byType(Switch));
     await tester.pump();
-
     expect(find.byType(Card), findsNothing);
   });
 }
