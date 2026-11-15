@@ -23,3 +23,18 @@ We would need to update the route parsing condition to recognize four URL segmen
 Step Prediction What you saw Same?
 a. Tap a card. Is the bottom navigation bar visible on the detail?|No. The bottom navigation bar will not be visible on the detail screen.
 b. With the detail open, tap Profile, then Events. What do you see?|The Profile and Events tabs cannot be tapped while the detail screen is open because the bottom navigation bar is covered.
+(a) Tap the third icon (Profile): The app may throw an exception because the bottom navigation has three destinations but the router has four branches.
+
+(b) Enter #/profile: The Profile screen should still open because its route is registered in the router.
+
+### Task 3 — Four-tab navigation
+
+**Prediction:**
+
+- (a) Removing Notes from the bottom bar while keeping four router branches causes a mismatch. Tapping the third icon may select the wrong branch or trigger an assertion.
+- (b) Typing `#/profile` should still open the Profile screen because the route remains registered.
+
+**What I observed:**
+
+- (a) An exception occurred when the navigation destinations and router branches did not match.
+- (b) Profile should remain accessible directly through its route.

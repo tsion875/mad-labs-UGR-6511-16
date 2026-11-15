@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'router.dart'; // ignore: unused_import — used from Task 5 on
@@ -10,7 +11,7 @@ class AppShell extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
   // TODO(lab): Task 3 — titles for all four branches, in branch order.
-  static const _titles = ['Events', 'Profile'];
+  static const _titles = ['Events', 'Notes', 'Lost & found', 'Profile'];
 
   void _goBranch(int index) {
     // Tapping the current tab again pops that branch to its first route.
@@ -39,8 +40,16 @@ class AppShell extends StatelessWidget {
             selectedIcon: Icon(Icons.event),
             label: 'Events',
           ),
-          // TODO(lab): Task 3 — Notes (Icons.note_outlined / Icons.note) and
-          // Lost & found (Icons.search_outlined / Icons.search) destinations.
+          NavigationDestination(
+            icon: Icon(Icons.note_outlined),
+            selectedIcon: Icon(Icons.note),
+            label: 'Notes',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.search_outlined),
+            selectedIcon: Icon(Icons.search),
+            label: 'Lost & found',
+          ),
           NavigationDestination(
             icon: Icon(Icons.person_outline),
             selectedIcon: Icon(Icons.person),
@@ -72,12 +81,11 @@ class AppDrawer extends StatelessWidget {
               child: Text('Campus Companion', style: TextStyle(fontSize: 22)),
             ),
           ),
-          // TODO(lab): Task 5 — ListTiles for 'Check-in' (Icons.how_to_reg →
-          // Routes.checkIn) and 'About' (Icons.info_outline → Routes.about).
-          // Close the drawer with Navigator.pop(context) before
-          // context.push(...). Add a Divider and an AboutListTile.
+          // TODO(lab): Task 5 — ListTiles for 'Check-in' and 'About'.
         ],
       ),
     );
   }
 }
+
+

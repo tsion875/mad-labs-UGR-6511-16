@@ -6,6 +6,8 @@ import '../screens/check_in_screen.dart';
 import '../screens/events_screen.dart';
 import '../screens/profile_screen.dart';
 import 'app_shell.dart';
+import '../screens/notes_screen.dart';
+import '../screens/lost_found_screen.dart';
 
 /// Route paths in one place so screens never hard-code strings twice.
 abstract final class Routes {
@@ -54,6 +56,22 @@ GoRouter createRouter({String initialLocation = Routes.events}) {
           // and Routes.lostFound (LostFoundScreen), in that order, between
           // events and profile. Then add the matching destinations in
           // AppShell.
+                    StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: Routes.notes,
+                builder: (context, state) => const NotesScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: Routes.lostFound,
+                builder: (context, state) => const LostFoundScreen(),
+              ),
+            ],
+          ),
           StatefulShellBranch(
             routes: [
               GoRoute(
