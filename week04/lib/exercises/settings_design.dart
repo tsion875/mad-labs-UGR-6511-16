@@ -64,7 +64,7 @@ GoRouter createDesignRouter({String initialLocation = DesignRoutes.home}) {
 
       // Settings is outside the StatefulShellRoute, so it uses the root
       // navigator and appears without the bottom navigation bar.
-      GoRoute(
+      // Task 8: Settings is a root-level route outside the tab navigation.GoRoute(
         path: DesignRoutes.settings,
         builder: (context, state) => const SettingsPage(),
       ),
