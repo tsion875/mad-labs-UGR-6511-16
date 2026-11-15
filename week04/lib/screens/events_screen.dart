@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/sample_events.dart';
 import '../models/event.dart';
 import '../widgets/event_card.dart';
-
+import 'event_detail_screen.dart';
 /// The events feed.
 ///
 /// [now] is injectable so tests (and the sample data) do not depend on the
@@ -45,7 +45,15 @@ class _EventList extends StatelessWidget {
 
     Widget item(BuildContext context, int index) {
       final event = events[index];
-      return EventCard(event: event);
+      return EventCard(
+  event: event,
+  onTap: () => Navigator.push(
+    context,
+    MaterialPageRoute<void>(
+      builder: (_) => EventDetailScreen(event: event),
+    ),
+  ),
+);
     }
 
     return LayoutBuilder(

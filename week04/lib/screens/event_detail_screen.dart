@@ -55,6 +55,40 @@ class EventDetailScreen extends StatelessWidget {
       // with Share, Add to calendar and Bookmark IconButtons, and a docked
       // FloatingActionButton.extended 'Register' (endDocked) that shows a
       // SnackBar 'Registered for <title>'.
+            bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              tooltip: 'Share',
+              onPressed: () {},
+              icon: const Icon(Icons.share),
+            ),
+            IconButton(
+              tooltip: 'Add to calendar',
+              onPressed: () {},
+              icon: const Icon(Icons.calendar_today),
+            ),
+            IconButton(
+              tooltip: 'Bookmark',
+              onPressed: () {},
+              icon: const Icon(Icons.bookmark),
+            ),
+            const SizedBox(width: 48),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Registered for ${event.title}')),
+          );
+        },
+        icon: const Icon(Icons.how_to_reg),
+        label: const Text('Register'),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }
