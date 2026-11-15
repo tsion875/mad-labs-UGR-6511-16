@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../data/sample_events.dart';
 import '../screens/about_screen.dart';
 import '../screens/check_in_screen.dart';
+import '../screens/edit_profile_screen.dart';
 import '../screens/event_detail_screen.dart';
 import '../screens/events_screen.dart';
 import '../screens/profile_screen.dart';
@@ -33,6 +34,7 @@ abstract final class Routes {
 final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
 GoRouter createRouter({String initialLocation = Routes.events}) {
+  GoRouter.optionURLReflectsImperativeAPIs = true;
   return GoRouter(
     navigatorKey: rootNavigatorKey,
     initialLocation: initialLocation,
@@ -94,9 +96,16 @@ GoRouter createRouter({String initialLocation = Routes.events}) {
               GoRoute(
                 path: Routes.profile,
                 builder: (context, state) => const ProfileScreen(),
-                // TODO(lab): Task 6 — nested GoRoute(path: 'edit') on the
-                // root navigator that builds EditProfileScreen with
-                // initialName from state.uri.queryParameters['name'].
+                routes: [
+                  GoRoute(
+                    path: 'edit',
+                    parentNavigatorKey: rootNavigatorKey,
+                    builder: (context, state) => EditProfileScreen(
+                      initialName:
+                          state.uri.queryParameters['name'] ?? '',
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

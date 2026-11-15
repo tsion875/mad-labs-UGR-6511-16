@@ -28,11 +28,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   void _save() {
-    final name = _controller.text.trim();
-    if (name.isEmpty) return;
-    // TODO(lab): Task 6 — return the name to the caller with context.pop.
-    context.pop();
-  }
+  final name = _controller.text.trim();
+
+  if (name.isEmpty) return;
+
+  context.pop(name);
+}
 
   @override
   Widget build(BuildContext context) {

@@ -46,3 +46,7 @@ b. With the detail open, tap Profile, then Events. What do you see?|The Profile 
   task 5:
   Step| Prediction| What you saw |Same?
   a. Remove the line that closes the drawer, open About, press Back |The drawer will remain open because we removed the line that closes it. |Pressing Back took me back to the navigation bar; the drawer was closed.| No
+  task 6:
+  Step| Prediction
+  a. Edit the name to Hana Tadesse. What does the address end with on the edit page the next time you open it? |The address should contain ?name=Hana+Tadesse (or an equivalent URL-encoded version), preserving the space in the name.|After saving Hana Tadesse and reopening Edit Profile, the URL ended with ?name=Hana+Tadesse.
+  b. Open the edit page and press Back. What does push return? | It should return null because I pressed Back without saving.|Pressing Back without saving returned null. The profile kept the previous saved name, Hana Tadesse.

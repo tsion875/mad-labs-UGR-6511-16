@@ -1,4 +1,8 @@
+
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../navigation/router.dart';
 
 /// Profile screen. Stateful since week 4: it owns the display name, which
 /// the edit route returns as a result.
@@ -13,11 +17,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _name = 'Sara Bekele';
 
   Future<void> _edit() async {
-    // TODO(lab): Task 6 — push Routes.editProfile with ?name=<current name>
-    // (build it with Uri(path:, queryParameters:)), await the String
-    // result, and if it is non-null (and the widget is still mounted)
-    // setState the new name.
-    setState(() => _name = _name.trim()); // placeholder; replace in Task 6
+    final uri = Uri(
+      path: Routes.editProfile,
+      queryParameters: {'name': _name},
+    );
+
+    debugPrint('EDIT PROFILE URL: $uri');
+
+    final result = await GoRouter.of(context).push<String>(
+  uri.toString(),
+);
+
+    if (result != null && mounted) {
+      setState(() {
+        _name = result;
+      });
+    }
   }
 
   @override

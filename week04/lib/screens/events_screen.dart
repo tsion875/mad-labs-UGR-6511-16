@@ -11,11 +11,6 @@ import '../widgets/event_card.dart';
 ///
 /// [now] is injectable so tests (and the sample data) do not depend on the
 /// real clock.
-// TODO(lab): Task 2 — tapping an EventCard opens EventDetailScreen for
-// that event: first with Navigator.push, then (Task 4) with go_router.
-// TODO(lab): Task 7 — split the feed into 'Upcoming' and 'Past' tabs with a
-// DefaultTabController, a TabBar and a TabBarView. Use event.isUpcoming(now:
-// clock). Show 'No upcoming events' / 'No past events' when a tab is empty.
 class EventsScreen extends StatelessWidget {
   const EventsScreen({this.now, super.key});
 
@@ -26,16 +21,50 @@ class EventsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final clock = now ?? DateTime.now();
+
     final upcoming = sampleEvents
-        .where((e) => e.isUpcoming(now: clock))
+        .where((event) => event.isUpcoming(now: clock))
         .toList();
 
-    return _EventList(events: upcoming, emptyText: 'No upcoming events');
+    final past = sampleEvents
+        .where((event) => !event.isUpcoming(now: clock))
+        .toList();
+
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        children: [
+          const TabBar(
+            tabs: [
+              Tab(text: 'Upcoming'),
+              Tab(text: 'Past'),
+            ],
+          ),
+          Expanded(
+            child: TabBarView(
+              children: [
+                _EventList(
+                  events: upcoming,
+                  emptyText: 'No upcoming events',
+                ),
+                _EventList(
+                  events: past,
+                  emptyText: 'No past events',
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
 class _EventList extends StatelessWidget {
-  const _EventList({required this.events, required this.emptyText});
+  const _EventList({
+    required this.events,
+    required this.emptyText,
+  });
 
   final List<Event> events;
   final String emptyText;
