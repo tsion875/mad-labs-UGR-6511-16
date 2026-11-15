@@ -11,6 +11,7 @@
 // Run it:  flutter run -d chrome -t lib/exercises/settings_design.dart
 // Test it: flutter test test/exercises/settings_design_test.dart
 
+ 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -60,8 +61,13 @@ GoRouter createDesignRouter({String initialLocation = DesignRoutes.home}) {
           ),
         ],
       ),
-      // TODO(lab): Task 8 — the route for DesignRoutes.settings. Which
-      // navigator must it be on so that it hides the bottom bar?
+
+      // Settings is outside the StatefulShellRoute, so it uses the root
+      // navigator and appears without the bottom navigation bar.
+      GoRoute(
+        path: DesignRoutes.settings,
+        builder: (context, state) => const SettingsPage(),
+      ),
     ],
   );
 }
@@ -101,6 +107,16 @@ class DesignShell extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: [
             const DrawerHeader(child: Text('Settings design')),
+
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings'),
+              onTap: () {
+                Navigator.pop(context);
+                context.push(DesignRoutes.settings);
+              },
+            ),
+
             const AboutListTile(
               icon: Icon(Icons.info_outline),
               applicationName: 'Settings design',
@@ -108,8 +124,6 @@ class DesignShell extends StatelessWidget {
           ],
         ),
       ),
-      // TODO(lab): Task 8 — a way to open Settings from every tab. Choose
-      // where it goes and write the reason in DECISIONS.md.
       body: navigationShell,
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
