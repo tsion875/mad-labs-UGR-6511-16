@@ -50,3 +50,6 @@ b. With the detail open, tap Profile, then Events. What do you see?|The Profile 
   Step| Prediction
   a. Edit the name to Hana Tadesse. What does the address end with on the edit page the next time you open it? |The address should contain ?name=Hana+Tadesse (or an equivalent URL-encoded version), preserving the space in the name.|After saving Hana Tadesse and reopening Edit Profile, the URL ended with ?name=Hana+Tadesse.
   b. Open the edit page and press Back. What does push return? | It should return null because I pressed Back without saving.|Pressing Back without saving returned null. The profile kept the previous saved name, Hana Tadesse.
+  task7:
+  Step |Prediction
+  Self-check 3: Remove Expanded around TabBarView |The screen will likely show a layout error because TabBarView needs a bounded height inside the Column.|The app throws a layout error because TabBarView receives unbounded height. Adding Expanded fixes the problem by giving TabBarView the remaining available space
