@@ -1,3 +1,4 @@
+
 import 'package:campus_companion/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -5,7 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   Widget app(Size size) => MediaQuery(
         data: MediaQueryData(size: size),
-        child: const MaterialApp(home: Scaffold(body: ProfileScreen())),
+        child: const MaterialApp(
+          home: Scaffold(body: ProfileScreen()),
+        ),
       );
 
   testWidgets('shows name, stats and actions', (tester) async {
@@ -31,4 +34,22 @@ void main() {
   // SizedBox(width: 320), with a MediaQuery that reports a 320 x 640
   // portrait phone. Expect no exception (an overflow is an exception in a
   // test), and expect the stat label 'Posts' to end inside the 320 px.
+  testWidgets('fits a narrow phone without overflow', (tester) async {
+    await tester.pumpWidget(
+      Align(
+        alignment: Alignment.topLeft,
+        child: SizedBox(
+          width: 320,
+          child: app(const Size(320, 640)),
+        ),
+      ),
+    );
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('Posts'), findsOneWidget);
+    expect(
+      tester.getRect(find.text('Posts')).right,
+      lessThanOrEqualTo(320),
+    );
+  });
 }
