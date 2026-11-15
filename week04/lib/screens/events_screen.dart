@@ -34,7 +34,7 @@ class EventsScreen extends StatelessWidget {
       length: 2,
       child: Column(
         children: [
-          const TabBar(
+          // Task 7: Separate upcoming and past events into tabs.const TabBar(
             tabs: [
               Tab(text: 'Upcoming'),
               Tab(text: 'Past'),
