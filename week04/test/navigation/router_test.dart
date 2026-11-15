@@ -58,12 +58,17 @@ void main() {
       expect(find.byType(EventsScreen), findsOneWidget);
     });
 
-    // TODO(lab): Task 4 — write two tests here before you change
-    // router.dart, and watch them fail:
-    // 1. start at '/events/nope' and expect the text 'Event not found';
-    // 2. start at a location that matches no route and expect the text of
-    //    your error page ('No route for ...').
-    // Use pumpApp(tester, initial: ...).
+    testWidgets('unknown event ID shows Event not found', (tester) async {
+  await pumpApp(tester, initial: '/events/nope');
+
+  expect(find.text('Event not found'), findsOneWidget);
+});
+
+testWidgets('unknown route shows the error page', (tester) async {
+  await pumpApp(tester, initial: '/does-not-exist');
+
+  expect(find.textContaining('No route for'), findsOneWidget);
+});
   });
 
   group('drawer', () {

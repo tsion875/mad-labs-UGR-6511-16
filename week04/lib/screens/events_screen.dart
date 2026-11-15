@@ -1,9 +1,12 @@
+
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../data/sample_events.dart';
 import '../models/event.dart';
+import '../navigation/router.dart';
 import '../widgets/event_card.dart';
-import 'event_detail_screen.dart';
+
 /// The events feed.
 ///
 /// [now] is injectable so tests (and the sample data) do not depend on the
@@ -45,15 +48,11 @@ class _EventList extends StatelessWidget {
 
     Widget item(BuildContext context, int index) {
       final event = events[index];
+
       return EventCard(
-  event: event,
-  onTap: () => Navigator.push(
-    context,
-    MaterialPageRoute<void>(
-      builder: (_) => EventDetailScreen(event: event),
-    ),
-  ),
-);
+        event: event,
+        onTap: () => context.push(Routes.eventDetailFor(event.id)),
+      );
     }
 
     return LayoutBuilder(
@@ -69,6 +68,7 @@ class _EventList extends StatelessWidget {
             itemBuilder: item,
           );
         }
+
         return ListView.builder(
           padding: const EdgeInsets.all(8),
           itemCount: events.length,
