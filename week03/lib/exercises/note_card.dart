@@ -1,12 +1,3 @@
-// Lab 3, Task 6 — "Your own design": a preview card for one note.
-//
-// The design is described in lab/README.md, Task 6. The constructor and
-// editedLabel are given; you choose the widgets in build().
-//
-// See it running, and resize the browser window to 360 and 900 px:
-//   flutter run -d chrome -t lib/exercises/note_card.dart
-// test/exercises/note_card_test.dart checks the parts of the design that a
-// test can check.
 
 import 'package:flutter/material.dart';
 
@@ -35,11 +26,89 @@ class NoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO(lab): Task 6 — build the card described in lab/README.md,
-    // Task 6, at 360 px and at 900 px wide. Choose the widgets yourself.
-    // At Checkpoint B you draw your widget tree and say which widget stops
-    // the title overflowing.
-    return Text(title);
+    final theme = Theme.of(context);
+
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxWidth: maxCardWidth,
+        ),
+        child: SizedBox(
+          width: double.infinity,
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Title and optional pin icon
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.titleMedium,
+                        ),
+                      ),
+                      if (pinned)
+                        const Icon(Icons.push_pin),
+                    ],
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  // Note body
+                  Text(
+                    body,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodyMedium,
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  // Tags and edited date
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Wrap(
+                          spacing: 6,
+                          runSpacing: 4,
+                          children: tags.map((tag) {
+                            return Chip(
+                              label: Text(tag),
+                              labelStyle: theme.textTheme.labelSmall,
+                              visualDensity: VisualDensity.compact,
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+
+                      const SizedBox(width: 8),
+
+                      // Date stays on the right
+                      Text(
+                        editedLabel(edited),
+                        style: theme.textTheme.labelSmall,
+                        textAlign: TextAlign.end,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
