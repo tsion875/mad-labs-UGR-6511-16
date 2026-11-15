@@ -27,10 +27,6 @@ class AppShell extends StatelessWidget {
       appBar: AppBar(title: Text(_titles[navigationShell.currentIndex])),
       drawer: const AppDrawer(),
       body: navigationShell,
-      // NavigationBar is the Material 3 successor of BottomNavigationBar.
-      // The older widget still exists; the API is nearly identical
-      // (items/currentIndex/onTap vs destinations/selectedIndex/
-      // onDestinationSelected).
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
         onDestinationSelected: _goBranch,
@@ -78,14 +74,37 @@ class AppDrawer extends StatelessWidget {
             ),
             child: const Align(
               alignment: Alignment.bottomLeft,
-              child: Text('Campus Companion', style: TextStyle(fontSize: 22)),
+              child: Text(
+                'Campus Companion',
+                style: TextStyle(fontSize: 22),
+              ),
             ),
           ),
-          // TODO(lab): Task 5 — ListTiles for 'Check-in' and 'About'.
+          ListTile(
+            leading: const Icon(Icons.how_to_reg),
+            title: const Text('Check-in'),
+            onTap: () {
+              Navigator.pop(context);
+              context.push(Routes.checkIn);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.info_outline),
+            title: const Text('About'),
+            onTap: () {
+              Navigator.pop(context);// Temporarily removed for the Task 5 experiment.
+              context.push(Routes.about);
+            },
+          ),
+          const Divider(),
+          const AboutListTile(
+            icon: Icon(Icons.info),
+            child: Text('App information'),
+            applicationName: 'Campus Companion',
+            applicationVersion: '0.1.0+1',
+          ),
         ],
       ),
     );
   }
 }
-
-

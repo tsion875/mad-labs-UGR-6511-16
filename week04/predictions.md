@@ -42,3 +42,7 @@ b. With the detail open, tap Profile, then Events. What do you see?|The Profile 
   a. #/events/e3 | The Event Detail screen should open for event e3.|The event detail screen opened.|yes
   b. #/events/nope|The app should display Event not found because nope is not a valid event ID|The page displayed “Event not found”.|yes
   c. #/nothing|The app should display a Not found page with the message No route for /nothing.|The Not found page displayed “No route for /nothing”.|yes
+  task 5:The About page will open. When I press Back, I predict the drawer will still be open because the line that closes it was removed.
+  task 5:
+  Step| Prediction| What you saw |Same?
+  a. Remove the line that closes the drawer, open About, press Back |The drawer will remain open because we removed the line that closes it. |Pressing Back took me back to the navigation bar; the drawer was closed.| No
