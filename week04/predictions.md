@@ -1,7 +1,10 @@
-Step| Prediction| What you saw| Same?
-a. Open the address …/#/events/42. Which screen appears? | The Event 42 screen appears, showing Career fair.
-b. Then press the back arrow in the app bar. Which screen appears? Press it again.|First, the Events list appears. Press back again and the Named routes demo home screen appears.
-c. Open the address …/#/events/abc. Which screen appears, and what does the console show? |The app displays the Named routes demo home screen instead of the Unknown route screen. No custom error appears in the console.|The Named routes demo home screen appears. No custom error is printed in the console.|no
+### Task 1 — Read and predict: named routes
+
+| Step                                                                                       | Prediction                                                                                      | What you saw                                                                                                           | Same? |
+| ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----- |
+| a. Open the address `/#/events/42`. Which screen appears?                                  | The Event 42 screen appears, showing Career fair.                                               | The Event 42 screen appeared, showing Career fair.                                                                     | Yes   |
+| b. Press the back arrow in the app bar. Which screen appears? Press it again.              | First, the Events list appears. Press back again and the Named routes demo home screen appears. | First, the Events list appeared. Pressing back again returned to the home screen.                                      | Yes   |
+| c. Open the address `/#/events/abc`. Which screen appears, and what does the console show? | The Unknown route screen appears. No custom error should be printed in the console.             | The Unknown route screen appeared, displaying `No screen for /events/abc`. No custom error was printed in the console. | Yes   |
 
 ## 2. Explain
 
