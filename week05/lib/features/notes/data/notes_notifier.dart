@@ -1,3 +1,4 @@
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../domain/note.dart';
@@ -13,10 +14,6 @@ part 'notes_notifier.g.dart';
 /// screen — and here it throws, so the mistake is caught immediately.
 @riverpod
 class Notes extends _$Notes {
-  // TODO(lab): Task 1 — implement add, update, remove and togglePinned.
-  // The contract is test/features/notes/notes_notifier_test.dart.
-
-  // ignore: prefer_final_fields — incremented once Task 1 is done
   int _nextId = 1;
 
   @override
@@ -24,22 +21,47 @@ class Notes extends _$Notes {
 
   /// Adds a note with id `'n$_nextId'` (then increments) and returns it.
   Note add({required String title, required String body, DateTime? now}) {
-    throw UnimplementedError('add: next id would be n$_nextId');
+    final note = Note(
+      id: 'n${_nextId++}',
+      title: title,
+      body: body,
+      updatedAt: now ?? DateTime.now(),
+    );
+
+    state = List.unmodifiable([...state, note]);
+
+    return note;
   }
 
   /// Replaces the note with the same id, setting updatedAt to [now].
   void update(Note updated, {DateTime? now}) {
-    throw UnimplementedError();
+    final updatedNote = updated.copyWith(
+      updatedAt: now ?? DateTime.now(),
+    );
+
+    state = List.unmodifiable([
+      for (final note in state)
+        if (note.id == updated.id) updatedNote else note,
+    ]);
   }
 
   /// Removes the note with this id. Other notes stay.
   void remove(String id) {
-    throw UnimplementedError();
+    state = List.unmodifiable([
+      for (final note in state)
+        if (note.id != id) note,
+    ]);
   }
 
   /// Flips `isPinned` of the note with this id.
   void togglePinned(String id) {
-    throw UnimplementedError();
+    state = List.unmodifiable([
+      for (final note in state)
+        if (note.id == id)
+          note.copyWith(isPinned: !note.isPinned)
+        else
+          note,
+    ]);
   }
 }
 
@@ -47,9 +69,17 @@ class Notes extends _$Notes {
 /// only when [notesProvider] changes.
 @riverpod
 List<Note> sortedNotes(Ref ref) {
-  // TODO(lab): Task 1 — return the notes in this order, without changing
-  // the list that notesProvider holds.
-  return ref.watch(notesProvider);
+  final notes = [...ref.watch(notesProvider)];
+
+  notes.sort((a, b) {
+    if (a.isPinned != b.isPinned) {
+      return a.isPinned ? -1 : 1;
+    }
+
+    return b.updatedAt.compareTo(a.updatedAt);
+  });
+
+  return List.unmodifiable(notes);
 }
 
 /// One note by id, or null. A family provider.
