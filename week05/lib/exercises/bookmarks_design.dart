@@ -1,16 +1,3 @@
-// Lab Task 4 — Your own design: bookmarks.
-//
-// A small app with a list of talks. The requirement:
-//
-//   The bookmark count in the app bar, the icon on each talk and the
-//   Saved page always agree. A bookmark stays when the user opens Saved
-//   and comes back.
-//
-// Decide what the state is, where it lives and which widgets watch it.
-// Write your decisions in DECISIONS.md, then implement them.
-//
-// Run it:  flutter run -d chrome -t lib/exercises/bookmarks_design.dart
-// Test it: flutter test test/exercises/bookmarks_design_test.dart
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,6 +9,25 @@ class Talk {
 
   final String id;
   final String title;
+}
+
+// Shared app state: a set of bookmarked talk IDs.
+final bookmarkedTalkIdsProvider =
+    NotifierProvider<BookmarkedTalkIdsNotifier, Set<String>>(
+  BookmarkedTalkIdsNotifier.new,
+);
+
+class BookmarkedTalkIdsNotifier extends Notifier<Set<String>> {
+  @override
+  Set<String> build() => <String>{};
+
+  void toggle(String talkId) {
+    if (state.contains(talkId)) {
+      state = {...state}..remove(talkId);
+    } else {
+      state = {...state, talkId};
+    }
+  }
 }
 
 const talks = [
@@ -73,52 +79,68 @@ class TalksPage extends StatelessWidget {
   }
 }
 
-/// Keeps its own `_saved` flag, so no other widget can see it.
-class BookmarkButton extends StatefulWidget {
+// Watches the shared state and changes it when pressed.
+class BookmarkButton extends ConsumerWidget {
   const BookmarkButton({required this.talk, super.key});
 
   final Talk talk;
 
   @override
-  State<BookmarkButton> createState() => _BookmarkButtonState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final saved = ref.watch(bookmarkedTalkIdsProvider);
+    final isSaved = saved.contains(talk.id);
 
-class _BookmarkButtonState extends State<BookmarkButton> {
-  // TODO(lab): Task 4 — this flag is local widget state. Decide what the
-  // shared state is and where it lives (DECISIONS.md), then change this
-  // widget, BookmarkCount and SavedPage so that all three agree.
-  bool _saved = false;
-
-  @override
-  Widget build(BuildContext context) {
     return IconButton(
-      tooltip: _saved ? 'Remove bookmark' : 'Bookmark',
-      icon: Icon(_saved ? Icons.bookmark : Icons.bookmark_border),
-      onPressed: () => setState(() => _saved = !_saved),
+      tooltip: isSaved ? 'Remove bookmark' : 'Bookmark',
+      icon: Icon(isSaved ? Icons.bookmark : Icons.bookmark_border),
+      onPressed: () {
+        ref.read(bookmarkedTalkIdsProvider.notifier).toggle(talk.id);
+      },
     );
   }
 }
 
-class BookmarkCount extends StatelessWidget {
+// Watches the shared state and displays its size.
+class BookmarkCount extends ConsumerWidget {
   const BookmarkCount({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // TODO(lab): Task 4 — show the real number of bookmarks.
-    return const Center(child: Text('Bookmarks: 0'));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final saved = ref.watch(bookmarkedTalkIdsProvider);
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: Text('Bookmarks: ${saved.length}'),
+      ),
+    );
   }
 }
 
-class SavedPage extends StatelessWidget {
+// Watches the shared state and displays only bookmarked talks.
+class SavedPage extends ConsumerWidget {
   const SavedPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // TODO(lab): Task 4 — list the bookmarked talks, each with its
-    // BookmarkButton. Keep the empty text when there are none.
+  Widget build(BuildContext context, WidgetRef ref) {
+    final saved = ref.watch(bookmarkedTalkIdsProvider);
+    final savedTalks = talks
+        .where((talk) => saved.contains(talk.id))
+        .toList();
+
     return Scaffold(
       appBar: AppBar(title: const Text('Saved')),
-      body: const Center(child: Text('No bookmarks yet.')),
+      body: savedTalks.isEmpty
+          ? const Center(child: Text('No bookmarks yet.'))
+          : ListView(
+              children: [
+                for (final talk in savedTalks)
+                  ListTile(
+                    title: Text(talk.title),
+                    trailing: BookmarkButton(talk: talk),
+                  ),
+              ],
+            ),
     );
   }
 }
