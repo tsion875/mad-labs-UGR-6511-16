@@ -1,5 +1,7 @@
+
 import 'package:campus_companion/core/router/router.dart';
 import 'package:campus_companion/features/profile/data/profile_notifier.dart';
+import 'package:campus_companion/features/profile/domain/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -32,10 +34,33 @@ void main() {
     expect(find.text('Hana Tadesse'), findsOneWidget);
   });
 
-  // TODO(lab): Task 3 — write this test before you change ProfileScreen,
-  // and run it to see it fail. Start the app at Routes.profile with
-  // profileProvider overridden to a profile of your own (a name, a
-  // programme and a year that are not the defaults). Expect the screen to
-  // show all three. The worked example is the override test in
-  // test/exercises/lecture_reminders_test.dart.
+  testWidgets('profile screen displays values from profileProvider override',
+      (tester) async {
+    await pumpApp(
+      tester,
+      initialLocation: Routes.profile,
+      overrides: [
+        profileProvider.overrideWith(() => _TestProfileNotifier()),
+      ],
+    );
+
+    expect(find.text('Hana Tadesse'), findsOneWidget);
+
+    expect(
+      find.text(
+        'B.Sc. Software Engineering · year 4',
+        findRichText: true,
+      ),
+      findsOneWidget,
+    );
+  });
+}
+
+class _TestProfileNotifier extends ProfileNotifier {
+  @override
+  Profile build() => const Profile(
+        name: 'Hana Tadesse',
+        programme: 'Software Engineering',
+        year: 4,
+      );
 }

@@ -1,31 +1,36 @@
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/router/router.dart';
+import '../data/profile_notifier.dart';
 
 /// Profile screen.
-// TODO(lab): Task 3 — the name, programme and year are local here, so no
-// other widget can read them. Show and change the profile in
-// profileProvider instead. Write your test first (lab README, Task 3).
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
+  Future<void> _edit(
+    BuildContext context,
+    WidgetRef ref,
+    String currentName,
+  ) async {
+    final uri = Uri(
+      path: Routes.editProfile,
+      queryParameters: {'name': currentName},
+    );
 
-class _ProfileScreenState extends State<ProfileScreen> {
-  String _name = 'Sara Bekele';
-
-  Future<void> _edit() async {
-    final uri = Uri(path: Routes.editProfile, queryParameters: {'name': _name});
     final result = await context.push<String>(uri.toString());
-    if (!mounted || result == null) return;
-    setState(() => _name = result);
+
+    if (!context.mounted || result == null) return;
+
+    ref.read(profileProvider.notifier).setName(result);
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(profileProvider);
+
     final theme = Theme.of(context);
     final isLandscape =
         MediaQuery.orientationOf(context) == Orientation.landscape;
@@ -37,18 +42,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundImage: AssetImage('assets/images/logo.png'),
         ),
         const SizedBox(height: 12),
-        Text(_name, style: theme.textTheme.headlineSmall),
+        Text(profile.name, style: theme.textTheme.headlineSmall),
         RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
             style: theme.textTheme.bodyMedium,
-            children: const [
-              TextSpan(text: 'B.Sc. '),
+            children: [
+              const TextSpan(text: 'B.Sc. '),
               TextSpan(
-                text: 'Computer Science',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                text: profile.programme,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              TextSpan(text: ' · year 3'),
+              TextSpan(text: ' · year ${profile.year}'),
             ],
           ),
         ),
@@ -75,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       alignment: WrapAlignment.center,
       children: [
         FilledButton.icon(
-          onPressed: _edit,
+          onPressed: () => _edit(context, ref, profile.name),
           icon: const Icon(Icons.edit),
           label: const Text('Edit profile'),
         ),
