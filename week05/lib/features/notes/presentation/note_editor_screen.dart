@@ -1,14 +1,11 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../data/notes_notifier.dart'; // ignore: unused_import — used from Task 2b
+import '../data/notes_notifier.dart';
 
 /// Creates a note (no [noteId]) or edits an existing one.
-///
-/// ConsumerStatefulWidget: we need `ref` *and* local widget state (the
-/// text controllers). Controllers are ephemeral UI state — they stay in
-/// the widget, not in a provider.
 class NoteEditorScreen extends ConsumerStatefulWidget {
   const NoteEditorScreen({this.noteId, super.key});
 
@@ -27,10 +24,21 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
   @override
   void initState() {
     super.initState();
-    // TODO(lab): Task 2b — when editing, start with the existing note's
-    // title and body.
-    _title = TextEditingController();
-    _body = TextEditingController();
+
+    String initialTitle = '';
+    String initialBody = '';
+
+    if (!widget.isNew) {
+      final note = ref.read(noteByIdProvider(widget.noteId!));
+
+      if (note != null) {
+        initialTitle = note.title;
+        initialBody = note.body;
+      }
+    }
+
+    _title = TextEditingController(text: initialTitle);
+    _body = TextEditingController(text: initialBody);
   }
 
   @override
@@ -41,13 +49,34 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
   }
 
   void _save() {
-    // TODO(lab): Task 2b — add a new note or update the existing one, then
-    // pop.
+    final notifier = ref.read(notesProvider.notifier);
+
+    final title = _title.text.trim();
+    final body = _body.text.trim();
+
+    if (widget.isNew) {
+      notifier.add(title: title, body: body);
+    } else {
+      final existing = ref.read(noteByIdProvider(widget.noteId!));
+
+      if (existing != null) {
+        notifier.update(
+          existing.copyWith(
+            title: title,
+            body: body,
+          ),
+        );
+      }
+    }
+
     context.pop();
   }
 
   void _delete() {
-    // TODO(lab): Task 2b — remove the note, then pop.
+    if (!widget.isNew) {
+      ref.read(notesProvider.notifier).remove(widget.noteId!);
+    }
+
     context.pop();
   }
 
